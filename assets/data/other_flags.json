@@ -1,0 +1,610 @@
+﻿[
+  {
+    "code": "ai",
+    "name": "Anguilla",
+    "category": "territory",
+    "isoAlpha2": "ai",
+    "flagAsset": "assets/flags/ai.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "aq",
+    "name": "Antártida",
+    "category": "territory",
+    "isoAlpha2": "aq",
+    "flagAsset": "assets/flags/aq.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "arab",
+    "name": "Liga Árabe",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/arab.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "as",
+    "name": "Samoa Americana",
+    "category": "territory",
+    "isoAlpha2": "as",
+    "flagAsset": "assets/flags/as.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "asean",
+    "name": "Associação das Nações do Sudeste Asiático",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/asean.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "aw",
+    "name": "Aruba",
+    "category": "territory",
+    "isoAlpha2": "aw",
+    "flagAsset": "assets/flags/aw.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "ax",
+    "name": "Ilhas Åland",
+    "category": "territory",
+    "isoAlpha2": "ax",
+    "flagAsset": "assets/flags/ax.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "bl",
+    "name": "São Bartolomeu",
+    "category": "territory",
+    "isoAlpha2": "bl",
+    "flagAsset": "assets/flags/bl.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "bm",
+    "name": "Bermudas",
+    "category": "territory",
+    "isoAlpha2": "bm",
+    "flagAsset": "assets/flags/bm.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "bq",
+    "name": "Bonaire, Santo Eustáquio e Saba",
+    "category": "territory",
+    "isoAlpha2": "bq",
+    "flagAsset": "assets/flags/bq.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "bv",
+    "name": "Ilha Bouvet",
+    "category": "territory",
+    "isoAlpha2": "bv",
+    "flagAsset": "assets/flags/bv.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "cc",
+    "name": "Ilhas Cocos (Keeling)",
+    "category": "territory",
+    "isoAlpha2": "cc",
+    "flagAsset": "assets/flags/cc.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "cefta",
+    "name": "Acordo Centro-Europeu de Livre Comércio",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/cefta.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "ck",
+    "name": "Ilhas Cook",
+    "category": "territory",
+    "isoAlpha2": "ck",
+    "flagAsset": "assets/flags/ck.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "cp",
+    "name": "Ilha de Clipperton",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/cp.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "cw",
+    "name": "Curaçao",
+    "category": "territory",
+    "isoAlpha2": "cw",
+    "flagAsset": "assets/flags/cw.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "cx",
+    "name": "Ilha Christmas",
+    "category": "territory",
+    "isoAlpha2": "cx",
+    "flagAsset": "assets/flags/cx.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "dg",
+    "name": "Diego Garcia",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/dg.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "eac",
+    "name": "Comunidade da África Oriental",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/eac.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "eh",
+    "name": "Saara Ocidental",
+    "category": "territory",
+    "isoAlpha2": "eh",
+    "flagAsset": "assets/flags/eh.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "es-ct",
+    "name": "Catalunha",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/es-ct.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "es-ga",
+    "name": "Galícia",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/es-ga.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "es-pv",
+    "name": "País Basco",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/es-pv.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "eu",
+    "name": "União Europeia",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/eu.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "fk",
+    "name": "Ilhas Falkland (Malvinas)",
+    "category": "territory",
+    "isoAlpha2": "fk",
+    "flagAsset": "assets/flags/fk.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "fo",
+    "name": "Ilhas Faroé",
+    "category": "territory",
+    "isoAlpha2": "fo",
+    "flagAsset": "assets/flags/fo.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gb-eng",
+    "name": "Inglaterra",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/gb-eng.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gb-nir",
+    "name": "Irlanda do Norte",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/gb-nir.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gb-sct",
+    "name": "Escócia",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/gb-sct.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gb-wls",
+    "name": "País de Gales",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/gb-wls.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gf",
+    "name": "Guiana Francesa",
+    "category": "territory",
+    "isoAlpha2": "gf",
+    "flagAsset": "assets/flags/gf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gg",
+    "name": "Guernsey",
+    "category": "territory",
+    "isoAlpha2": "gg",
+    "flagAsset": "assets/flags/gg.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gi",
+    "name": "Gibraltar",
+    "category": "territory",
+    "isoAlpha2": "gi",
+    "flagAsset": "assets/flags/gi.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gl",
+    "name": "Groenlândia",
+    "category": "territory",
+    "isoAlpha2": "gl",
+    "flagAsset": "assets/flags/gl.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gp",
+    "name": "Guadalupe",
+    "category": "territory",
+    "isoAlpha2": "gp",
+    "flagAsset": "assets/flags/gp.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gs",
+    "name": "Geórgia do Sul e Ilhas Sandwich do Sul",
+    "category": "territory",
+    "isoAlpha2": "gs",
+    "flagAsset": "assets/flags/gs.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "gu",
+    "name": "Guam",
+    "category": "territory",
+    "isoAlpha2": "gu",
+    "flagAsset": "assets/flags/gu.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "hk",
+    "name": "Hong Kong",
+    "category": "territory",
+    "isoAlpha2": "hk",
+    "flagAsset": "assets/flags/hk.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "hm",
+    "name": "Ilhas Heard e McDonald",
+    "category": "territory",
+    "isoAlpha2": "hm",
+    "flagAsset": "assets/flags/hm.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "ic",
+    "name": "Ilhas Canárias",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/ic.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "im",
+    "name": "Ilha de Man",
+    "category": "territory",
+    "isoAlpha2": "im",
+    "flagAsset": "assets/flags/im.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "io",
+    "name": "Território Britânico do Oceano Índico",
+    "category": "territory",
+    "isoAlpha2": "io",
+    "flagAsset": "assets/flags/io.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "je",
+    "name": "Jersey",
+    "category": "territory",
+    "isoAlpha2": "je",
+    "flagAsset": "assets/flags/je.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "ky",
+    "name": "Ilhas Cayman",
+    "category": "territory",
+    "isoAlpha2": "ky",
+    "flagAsset": "assets/flags/ky.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "mf",
+    "name": "São Martinho (parte francesa)",
+    "category": "territory",
+    "isoAlpha2": "mf",
+    "flagAsset": "assets/flags/mf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "mo",
+    "name": "Macau",
+    "category": "territory",
+    "isoAlpha2": "mo",
+    "flagAsset": "assets/flags/mo.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "mp",
+    "name": "Ilhas Marianas do Norte",
+    "category": "territory",
+    "isoAlpha2": "mp",
+    "flagAsset": "assets/flags/mp.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "mq",
+    "name": "Martinica",
+    "category": "territory",
+    "isoAlpha2": "mq",
+    "flagAsset": "assets/flags/mq.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "ms",
+    "name": "Montserrat",
+    "category": "territory",
+    "isoAlpha2": "ms",
+    "flagAsset": "assets/flags/ms.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "nc",
+    "name": "Nova Caledônia",
+    "category": "territory",
+    "isoAlpha2": "nc",
+    "flagAsset": "assets/flags/nc.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "nf",
+    "name": "Ilha Norfolk",
+    "category": "territory",
+    "isoAlpha2": "nf",
+    "flagAsset": "assets/flags/nf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "nu",
+    "name": "Niue",
+    "category": "territory",
+    "isoAlpha2": "nu",
+    "flagAsset": "assets/flags/nu.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "pc",
+    "name": "Comunidade do Pacífico",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/pc.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "pf",
+    "name": "Polinésia Francesa",
+    "category": "territory",
+    "isoAlpha2": "pf",
+    "flagAsset": "assets/flags/pf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "pm",
+    "name": "São Pedro e Miquelão",
+    "category": "territory",
+    "isoAlpha2": "pm",
+    "flagAsset": "assets/flags/pm.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "pn",
+    "name": "Ilhas Pitcairn",
+    "category": "territory",
+    "isoAlpha2": "pn",
+    "flagAsset": "assets/flags/pn.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "pr",
+    "name": "Porto Rico",
+    "category": "territory",
+    "isoAlpha2": "pr",
+    "flagAsset": "assets/flags/pr.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "re",
+    "name": "Reunião",
+    "category": "territory",
+    "isoAlpha2": "re",
+    "flagAsset": "assets/flags/re.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sh",
+    "name": "Santa Helena, Ascensão e Tristão da Cunha",
+    "category": "territory",
+    "isoAlpha2": "sh",
+    "flagAsset": "assets/flags/sh.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sh-ac",
+    "name": "Ascensão",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/sh-ac.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sh-hl",
+    "name": "Santa Helena",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/sh-hl.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sh-ta",
+    "name": "Tristão da Cunha",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/sh-ta.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sj",
+    "name": "Svalbard e Jan Mayen",
+    "category": "territory",
+    "isoAlpha2": "sj",
+    "flagAsset": "assets/flags/sj.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "sx",
+    "name": "São Martinho (parte neerlandesa)",
+    "category": "territory",
+    "isoAlpha2": "sx",
+    "flagAsset": "assets/flags/sx.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "tc",
+    "name": "Ilhas Turcas e Caicos",
+    "category": "territory",
+    "isoAlpha2": "tc",
+    "flagAsset": "assets/flags/tc.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "tf",
+    "name": "Terras Austrais Francesas",
+    "category": "territory",
+    "isoAlpha2": "tf",
+    "flagAsset": "assets/flags/tf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "tk",
+    "name": "Tokelau",
+    "category": "territory",
+    "isoAlpha2": "tk",
+    "flagAsset": "assets/flags/tk.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "tw",
+    "name": "Taiwan",
+    "category": "territory",
+    "isoAlpha2": "tw",
+    "flagAsset": "assets/flags/tw.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "um",
+    "name": "Ilhas Menores Distantes dos Estados Unidos",
+    "category": "territory",
+    "isoAlpha2": "um",
+    "flagAsset": "assets/flags/um.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "un",
+    "name": "Organização das Nações Unidas",
+    "category": "organization",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/un.svg",
+    "reason": "Organização; não representa um país do quiz."
+  },
+  {
+    "code": "vg",
+    "name": "Ilhas Virgens Britânicas",
+    "category": "territory",
+    "isoAlpha2": "vg",
+    "flagAsset": "assets/flags/vg.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "vi",
+    "name": "Ilhas Virgens Americanas",
+    "category": "territory",
+    "isoAlpha2": "vi",
+    "flagAsset": "assets/flags/vi.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "wf",
+    "name": "Wallis e Futuna",
+    "category": "territory",
+    "isoAlpha2": "wf",
+    "flagAsset": "assets/flags/wf.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "xk",
+    "name": "Kosovo",
+    "category": "region",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/xk.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  },
+  {
+    "code": "xx",
+    "name": "Bandeira desconhecida",
+    "category": "generic",
+    "isoAlpha2": null,
+    "flagAsset": "assets/flags/xx.svg",
+    "reason": "Bandeira genérica; não representa um país."
+  },
+  {
+    "code": "yt",
+    "name": "Mayotte",
+    "category": "territory",
+    "isoAlpha2": "yt",
+    "flagAsset": "assets/flags/yt.svg",
+    "reason": "Fora do escopo de 193 membros da ONU e dois observadores; não participa do quiz."
+  }
+]
