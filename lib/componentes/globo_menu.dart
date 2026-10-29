@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 /// Ilustração decorativa em widgets; não representa uma bandeira do catálogo.
-class MenuGlobe extends StatelessWidget {
-  const MenuGlobe({super.key});
+class GloboMenu extends StatelessWidget {
+  const GloboMenu({super.key});
 
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
+  Widget build(BuildContext contexto) => ExcludeSemantics(
     child: SizedBox(
       width: 140,
       height: 145,
@@ -31,7 +31,15 @@ class MenuGlobe extends StatelessWidget {
               child: Container(
                 width: 43,
                 height: 52,
-                decoration: BorderRadiusDecoration.green,
+                decoration: BoxDecoration(
+                  color: const Color(0xff31d780),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(28),
+                    topRight: Radius.circular(24),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(32),
+                  ),
+                ),
               ),
             ),
           ),
@@ -81,18 +89,6 @@ class MenuGlobe extends StatelessWidget {
           ),
         ],
       ),
-    ),
-  );
-}
-
-class BorderRadiusDecoration {
-  static final green = BoxDecoration(
-    color: const Color(0xff31d780),
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(28),
-      topRight: Radius.circular(24),
-      bottomLeft: Radius.circular(10),
-      bottomRight: Radius.circular(32),
     ),
   );
 }

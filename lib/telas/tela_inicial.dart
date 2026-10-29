@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 
-import '../data/country_repository.dart';
-import '../models/country.dart';
-import '../widgets/menu_action.dart';
-import '../widgets/menu_globe.dart';
-import 'game_setup_screen.dart';
-import 'continent_screen.dart';
+import '../componentes/acao_menu.dart';
+import '../componentes/globo_menu.dart';
+import '../componentes/tema_jogo.dart';
+import '../dados/repositorio_paises.dart';
+import '../modelos/pais.dart';
+import 'tela_continentes.dart';
+import 'tela_preparacao.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class TelaInicial extends StatefulWidget {
+  const TelaInicial({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<TelaInicial> createState() => _EstadoTelaInicial();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<Country>? _countries;
-  String? _error;
-  int _seconds = 60;
-  Future<void> _chooseContinent() async {
-    final continent = await Navigator.push<Continent>(
+class _EstadoTelaInicial extends State<TelaInicial> {
+  List<Pais>? _paises;
+  String? _erro;
+  int _segundos = 60;
+  Future<void> _escolherContinente() async {
+    final continente = await Navigator.push<Continente>(
       context,
-      MaterialPageRoute(builder: (_) => const ContinentScreen()),
+      MaterialPageRoute(builder: (_) => const TelaContinentes()),
     );
-    if (!mounted || continent == null) return;
-    _prepareGame(continent);
+    if (!mounted || continente == null) return;
+    _prepararPartida(continente);
   }
 
-  void _prepareGame(Continent? continent) {
+  void _prepararPartida(Continente? continente) {
     Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => GameSetupScreen(
-          countries: _countries!,
-          continent: continent,
-          seconds: _seconds,
+        builder: (_) => TelaPreparacao(
+          paises: _paises!,
+          continente: continente,
+          segundos: _segundos,
         ),
       ),
     );
@@ -43,22 +44,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadCountries();
+    _carregarPaises();
   }
 
-  Future<void> _loadCountries() async {
+  Future<void> _carregarPaises() async {
     setState(() {
-      _countries = null;
-      _error = null;
+      _paises = null;
+      _erro = null;
     });
     try {
-      final countries = await CountryRepository().loadCountries();
+      final paises = await RepositorioPaises().carregarPaises();
       if (!mounted) return;
-      setState(() => _countries = countries);
+      setState(() => _paises = paises);
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _error =
+        _erro =
             'Não foi possível carregar o catálogo local. '
             'Confira o JSON e os arquivos de bandeiras.';
       });
@@ -66,23 +67,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    Widget content;
-    if (_error != null) {
-      content = ListView(
+  Widget build(BuildContext contexto) {
+    Widget conteudoTela;
+    if (_erro != null) {
+      conteudoTela = ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          Text(_error!),
+          Text(_erro!),
           FilledButton(
-            onPressed: _loadCountries,
+            onPressed: _carregarPaises,
             child: const Text('Tentar novamente'),
           ),
         ],
       );
-    } else if (_countries == null) {
-      content = const Center(child: CircularProgressIndicator());
+    } else if (_paises == null) {
+      conteudoTela = const Center(child: CircularProgressIndicator());
     } else {
-      content = SingleChildScrollView(
+      conteudoTela = SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            const Center(child: MenuGlobe()),
+            const Center(child: GloboMenu()),
             const SizedBox(height: 16),
             const Center(
               child: Text(
@@ -136,20 +137,20 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 24),
-            MenuAction(
-              label: 'Jogar por Continente',
-              icon: Icons.explore_outlined,
-              color: const Color(0xff22cddd),
-              shadowColor: const Color(0xff1392a7),
-              onPressed: _chooseContinent,
+            AcaoMenu(
+              rotulo: 'Jogar por Continente',
+              icone: Icons.explore_outlined,
+              cor: const Color(0xff22cddd),
+              corSombra: const Color(0xff1392a7),
+              aoPressionar: _escolherContinente,
             ),
             const SizedBox(height: 16),
-            MenuAction(
-              onPressed: () => _prepareGame(null),
-              icon: Icons.casino_outlined,
-              label: 'Jogo aleatório',
-              color: const Color(0xffff5188),
-              shadowColor: const Color(0xffb82d66),
+            AcaoMenu(
+              aoPressionar: () => _prepararPartida(null),
+              icone: Icons.casino_outlined,
+              rotulo: 'Jogo aleatório',
+              cor: const Color(0xffff5188),
+              corSombra: const Color(0xffb82d66),
             ),
             const SizedBox(height: 24),
             Row(
@@ -169,16 +170,16 @@ class _HomeScreenState extends State<HomeScreen> {
               spacing: 10,
               runSpacing: 12,
               children: [
-                for (final seconds in [30, 60, 180, 300])
+                for (final segundos in [30, 60, 180, 300])
                   ChoiceChip(
-                    label: Text(switch (seconds) {
+                    label: Text(switch (segundos) {
                       180 => '3 min',
                       300 => '5 min',
-                      _ => '${seconds}s',
+                      _ => '${segundos}s',
                     }),
-                    selected: _seconds == seconds,
+                    selected: _segundos == segundos,
                     showCheckmark: false,
-                    onSelected: (_) => setState(() => _seconds = seconds),
+                    onSelected: (_) => setState(() => _segundos = segundos),
                     selectedColor: const Color(0xffffcf38),
                     backgroundColor: const Color(0xff4d38a6),
                     side: BorderSide.none,
@@ -188,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     shape: const StadiumBorder(),
                     labelStyle: TextStyle(
-                      color: _seconds == seconds
+                      color: _segundos == segundos
                           ? const Color(0xff2c2068)
                           : Colors.white,
                       fontSize: 17,
@@ -199,12 +200,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Tempo total: $_seconds segundos',
+              'Tempo total: $_segundos segundos',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              '${_countries!.length} países carregados',
+              '${_paises!.length} países carregados',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -212,17 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
-    final menuTheme = ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xff4d38a6),
-        brightness: Brightness.dark,
-      ),
-      scaffoldBackgroundColor: const Color(0xff2c2068),
-    );
     return Theme(
-      data: menuTheme,
+      data: temaJogo,
       child: Scaffold(
         body: Stack(
           fit: StackFit.expand,
@@ -261,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 520),
-                    child: content,
+                    child: conteudoTela,
                   ),
                 ),
               ),

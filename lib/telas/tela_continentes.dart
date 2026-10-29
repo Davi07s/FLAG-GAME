@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../models/country.dart';
+import '../componentes/tema_jogo.dart';
+import '../modelos/pais.dart';
 
-class ContinentScreen extends StatelessWidget {
-  const ContinentScreen({super.key});
+class TelaContinentes extends StatelessWidget {
+  const TelaContinentes({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexto) {
     return Theme(
-      data: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff4d38a6),
-          brightness: Brightness.dark,
-        ),
-      ),
+      data: temaJogo,
       child: Scaffold(
         backgroundColor: const Color(0xff2c2068),
         body: Stack(
@@ -57,7 +51,7 @@ class ContinentScreen extends StatelessWidget {
                         Row(
                           children: [
                             IconButton.filled(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () => Navigator.pop(contexto),
                               tooltip: 'Voltar ao menu',
                               style: IconButton.styleFrom(
                                 backgroundColor: const Color(0xff4d38a6),
@@ -82,23 +76,26 @@ class ContinentScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         LayoutBuilder(
-                          builder: (context, constraints) {
-                            final singleColumn =
+                          builder: (contexto, constraints) {
+                            final colunaUnica =
                                 constraints.maxWidth < 280 ||
-                                MediaQuery.textScalerOf(context).scale(20) > 28;
-                            final cardWidth = singleColumn
+                                MediaQuery.textScalerOf(contexto).scale(20) >
+                                    28;
+                            final larguraCartao = colunaUnica
                                 ? constraints.maxWidth
                                 : (constraints.maxWidth - 16) / 2;
                             return Wrap(
                               spacing: 16,
                               runSpacing: 22,
                               children: [
-                                for (final continent in Continent.values)
+                                for (final continente in Continente.values)
                                   SizedBox(
-                                    width: continent == Continent.oceania
+                                    width: continente == Continente.oceania
                                         ? constraints.maxWidth
-                                        : cardWidth,
-                                    child: _ContinentCard(continent: continent),
+                                        : larguraCartao,
+                                    child: _CartaoContinente(
+                                      continente: continente,
+                                    ),
                                   ),
                               ],
                             );
@@ -127,35 +124,35 @@ class ContinentScreen extends StatelessWidget {
   }
 }
 
-class _ContinentCard extends StatelessWidget {
-  const _ContinentCard({required this.continent});
+class _CartaoContinente extends StatelessWidget {
+  const _CartaoContinente({required this.continente});
 
-  final Continent continent;
+  final Continente continente;
 
   @override
-  Widget build(BuildContext context) {
-    final (color, shadow, icon) = switch (continent) {
-      Continent.africa => (
+  Widget build(BuildContext contexto) {
+    final (cor, sombra, icone) = switch (continente) {
+      Continente.africa => (
         const Color(0xffff8b36),
         const Color(0xffb95a25),
         Icons.wb_sunny,
       ),
-      Continent.america => (
+      Continente.america => (
         const Color(0xff31d780),
         const Color(0xff1b9255),
         Icons.landscape,
       ),
-      Continent.asia => (
+      Continente.asia => (
         const Color(0xffff5188),
         const Color(0xffb82d66),
         Icons.temple_buddhist,
       ),
-      Continent.europe => (
+      Continente.europa => (
         const Color(0xff6ba3ff),
         const Color(0xff3e64b8),
         Icons.location_city,
       ),
-      Continent.oceania => (
+      Continente.oceania => (
         const Color(0xff22cddd),
         const Color(0xff1392a7),
         Icons.beach_access,
@@ -164,12 +161,12 @@ class _ContinentCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32),
-        boxShadow: [BoxShadow(color: shadow, offset: const Offset(0, 7))],
+        boxShadow: [BoxShadow(color: sombra, offset: const Offset(0, 7))],
       ),
       child: FilledButton(
-        onPressed: () => Navigator.pop(context, continent),
+        onPressed: () => Navigator.pop(contexto, continente),
         style: FilledButton.styleFrom(
-          backgroundColor: color,
+          backgroundColor: cor,
           foregroundColor: const Color(0xff2c2068),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(32),
@@ -183,11 +180,11 @@ class _ContinentCard extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: Colors.white,
-              child: Icon(icon, color: color, size: 36),
+              child: Icon(icone, color: cor, size: 36),
             ),
             const SizedBox(height: 14),
             Text(
-              continent.label,
+              continente.rotulo,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
             ),

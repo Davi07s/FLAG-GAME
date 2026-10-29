@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../models/game_result.dart';
+import '../componentes/tema_jogo.dart';
+import '../modelos/resultado_partida.dart';
 
-class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key, required this.result, this.replayBuilder});
+class TelaResultado extends StatelessWidget {
+  const TelaResultado({
+    super.key,
+    required this.resultado,
+    this.construirNovaPartida,
+  });
 
-  final GameResult result;
-  final WidgetBuilder? replayBuilder;
+  final ResultadoPartida resultado;
+  final WidgetBuilder? construirNovaPartida;
 
   @override
-  Widget build(BuildContext context) {
-    final percentage = result.accuracy.toStringAsFixed(1).replaceAll('.', ',');
+  Widget build(BuildContext contexto) {
+    final percentual = resultado.percentualAcertos
+        .toStringAsFixed(1)
+        .replaceAll('.', ',');
     return Theme(
-      data: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff4d38a6),
-          brightness: Brightness.dark,
-        ),
-      ),
+      data: temaJogo,
       child: Scaffold(
         backgroundColor: const Color(0xff2c2068),
         body: SafeArea(
@@ -72,7 +72,7 @@ class ResultScreen extends StatelessWidget {
                             children: [
                               Positioned.fill(
                                 child: CircularProgressIndicator(
-                                  value: result.accuracy / 100,
+                                  value: resultado.percentualAcertos / 100,
                                   strokeWidth: 22,
                                   strokeCap: StrokeCap.round,
                                   color: const Color(0xff31d780),
@@ -88,7 +88,7 @@ class ResultScreen extends StatelessWidget {
                                     FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Text(
-                                        '$percentage%',
+                                        '$percentual%',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 52,
@@ -115,7 +115,7 @@ class ResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Percentual de acertos: $percentage%',
+                      'Percentual de acertos: $percentual%',
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Color(0xffd4caee)),
                     ),
@@ -144,11 +144,11 @@ class ResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     LayoutBuilder(
-                      builder: (context, constraints) {
-                        final singleColumn =
+                      builder: (contexto, constraints) {
+                        final colunaUnica =
                             constraints.maxWidth < 280 ||
-                            MediaQuery.textScalerOf(context).scale(20) > 28;
-                        final width = singleColumn
+                            MediaQuery.textScalerOf(contexto).scale(20) > 28;
+                        final largura = colunaUnica
                             ? constraints.maxWidth
                             : (constraints.maxWidth - 24) / 3;
                         return Wrap(
@@ -156,31 +156,34 @@ class ResultScreen extends StatelessWidget {
                           runSpacing: 16,
                           children: [
                             SizedBox(
-                              width: width,
-                              child: _ResultStat(
-                                value: result.answered,
-                                label: 'Respondidas',
-                                semanticsLabel: 'Respostas: ${result.answered}',
-                                color: Colors.white,
+                              width: largura,
+                              child: _EstatisticaResultado(
+                                valor: resultado.respondidas,
+                                rotulo: 'Respondidas',
+                                descricaoAcessivel:
+                                    'Respostas: ${resultado.respondidas}',
+                                cor: Colors.white,
                               ),
                             ),
                             SizedBox(
-                              width: width,
-                              child: _ResultStat(
-                                value: result.correct,
-                                label: 'Acertos',
-                                semanticsLabel: 'Acertos: ${result.correct}',
-                                color: const Color(0xff31d780),
+                              width: largura,
+                              child: _EstatisticaResultado(
+                                valor: resultado.acertos,
+                                rotulo: 'Acertos',
+                                descricaoAcessivel:
+                                    'Acertos: ${resultado.acertos}',
+                                cor: const Color(0xff31d780),
                               ),
                             ),
                             SizedBox(
-                              width: width,
-                              child: _ResultStat(
-                                value: result.answered - result.correct,
-                                label: 'Erros',
-                                semanticsLabel:
-                                    'Erros: ${result.answered - result.correct}',
-                                color: const Color(0xffff5188),
+                              width: largura,
+                              child: _EstatisticaResultado(
+                                valor:
+                                    resultado.respondidas - resultado.acertos,
+                                rotulo: 'Erros',
+                                descricaoAcessivel:
+                                    'Erros: ${resultado.respondidas - resultado.acertos}',
+                                cor: const Color(0xffff5188),
                               ),
                             ),
                           ],
@@ -189,7 +192,7 @@ class ResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Pontos: ${result.score}',
+                      'Pontos: ${resultado.pontos}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Color(0xffffcf38),
@@ -197,7 +200,7 @@ class ResultScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (result.answered == 0)
+                    if (resultado.respondidas == 0)
                       const Padding(
                         padding: EdgeInsets.only(top: 16),
                         child: Text(
@@ -207,26 +210,28 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(height: 24),
-                    if (replayBuilder != null) ...[
-                      _resultButton(
+                    if (construirNovaPartida != null) ...[
+                      _botaoResultado(
                         'Jogar de novo',
                         const Color(0xff31d780),
                         const Color(0xff1b9255),
                         () {
                           Navigator.pushReplacement<void, void>(
-                            context,
-                            MaterialPageRoute(builder: replayBuilder!),
+                            contexto,
+                            MaterialPageRoute(builder: construirNovaPartida!),
                           );
                         },
                       ),
                       const SizedBox(height: 20),
                     ],
-                    _resultButton(
+                    _botaoResultado(
                       'Voltar ao menu',
                       Colors.white,
                       const Color(0xffaaa4c5),
-                      () =>
-                          Navigator.popUntil(context, (route) => route.isFirst),
+                      () => Navigator.popUntil(
+                        contexto,
+                        (route) => route.isFirst,
+                      ),
                     ),
                   ],
                 ),
@@ -238,26 +243,26 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _resultButton(
-    String label,
-    Color color,
-    Color shadow,
-    VoidCallback onPressed,
+  Widget _botaoResultado(
+    String rotulo,
+    Color cor,
+    Color sombra,
+    VoidCallback aoPressionar,
   ) => DecoratedBox(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(36),
-      boxShadow: [BoxShadow(color: shadow, offset: const Offset(0, 6))],
+      boxShadow: [BoxShadow(color: sombra, offset: const Offset(0, 6))],
     ),
     child: FilledButton(
-      onPressed: onPressed,
+      onPressed: aoPressionar,
       style: FilledButton.styleFrom(
-        backgroundColor: color,
+        backgroundColor: cor,
         foregroundColor: const Color(0xff2c2068),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
       ),
       child: Text(
-        label,
+        rotulo,
         textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w900),
       ),
@@ -265,21 +270,21 @@ class ResultScreen extends StatelessWidget {
   );
 }
 
-class _ResultStat extends StatelessWidget {
-  const _ResultStat({
-    required this.value,
-    required this.label,
-    required this.semanticsLabel,
-    required this.color,
+class _EstatisticaResultado extends StatelessWidget {
+  const _EstatisticaResultado({
+    required this.valor,
+    required this.rotulo,
+    required this.descricaoAcessivel,
+    required this.cor,
   });
-  final int value;
-  final String label;
-  final String semanticsLabel;
-  final Color color;
+  final int valor;
+  final String rotulo;
+  final String descricaoAcessivel;
+  final Color cor;
 
   @override
-  Widget build(BuildContext context) => Semantics(
-    label: semanticsLabel,
+  Widget build(BuildContext contexto) => Semantics(
+    label: descricaoAcessivel,
     excludeSemantics: true,
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18),
@@ -294,15 +299,15 @@ class _ResultStat extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '$value',
+            '$valor',
             style: TextStyle(
-              color: color,
+              color: cor,
               fontSize: 34,
               fontWeight: FontWeight.w900,
             ),
           ),
           Text(
-            label,
+            rotulo,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xffd4caee),

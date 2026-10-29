@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
+import 'telas/tela_inicial.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const AplicativoBandeiras());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AplicativoBandeiras extends StatelessWidget {
+  const AplicativoBandeiras({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext contexto) => MaterialApp(
     title: 'Flag Game',
     theme: ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
     ),
-    home: const HomeScreen(), //tela inicial do jogo
+    home: const TelaInicial(), //tela inicial do jogo
   );
 }

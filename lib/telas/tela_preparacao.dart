@@ -1,46 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../models/country.dart';
-import '../models/quiz_mode.dart';
-import 'game_screen.dart';
+import '../componentes/tema_jogo.dart';
+import '../modelos/modo_pergunta.dart';
+import '../modelos/pais.dart';
+import 'tela_jogo.dart';
 
-class GameSetupScreen extends StatefulWidget {
-  const GameSetupScreen({
+class TelaPreparacao extends StatefulWidget {
+  const TelaPreparacao({
     super.key,
-    required this.countries,
-    required this.continent,
-    required this.seconds,
+    required this.paises,
+    required this.continente,
+    required this.segundos,
   });
 
-  final List<Country> countries;
-  final Continent? continent;
-  final int seconds;
+  final List<Pais> paises;
+  final Continente? continente;
+  final int segundos;
 
   @override
-  State<GameSetupScreen> createState() => _GameSetupScreenState();
+  State<TelaPreparacao> createState() => _EstadoTelaPreparacao();
 }
 
-class _GameSetupScreenState extends State<GameSetupScreen> {
-  QuizMode _mode = QuizMode.flagToCountry;
+class _EstadoTelaPreparacao extends State<TelaPreparacao> {
+  ModoPergunta _modo = ModoPergunta.bandeiraParaPais;
 
   @override
-  Widget build(BuildContext context) {
-    final count = widget.countries
+  Widget build(BuildContext contexto) {
+    final quantidade = widget.paises
         .where(
-          (country) =>
-              widget.continent == null || country.continent == widget.continent,
+          (pais) =>
+              widget.continente == null || pais.continente == widget.continente,
         )
         .length;
 
     return Theme(
-      data: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff4d38a6),
-          brightness: Brightness.dark,
-        ),
-      ),
+      data: temaJogo,
       child: Scaffold(
         backgroundColor: const Color(0xff2c2068),
         appBar: AppBar(
@@ -85,7 +79,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            widget.continent?.label ?? 'Jogo aleatório',
+                            widget.continente?.rotulo ?? 'Jogo aleatório',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 26,
@@ -93,9 +87,9 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Text('Tempo total: ${widget.seconds} segundos'),
+                          Text('Tempo total: ${widget.segundos} segundos'),
                           const SizedBox(height: 6),
-                          Text('$count países disponíveis'),
+                          Text('$quantidade países disponíveis'),
                         ],
                       ),
                     ),
@@ -109,10 +103,10 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    for (final mode in QuizMode.values) _modeCard(mode),
+                    for (final modo in ModoPergunta.values) _cartaoModo(modo),
                     const SizedBox(height: 16),
                     Text(
-                      'Modo selecionado: ${_mode.label}',
+                      'Modo selecionado: ${_modo.rotulo}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Color(0xffd4caee),
@@ -120,7 +114,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (count < 4)
+                    if (quantidade < 4)
                       const Text(
                         'Este conjunto precisa de pelo menos quatro países para jogar.',
                       ),
@@ -144,16 +138,16 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      onPressed: count < 4
+                      onPressed: quantidade < 4
                           ? null
                           : () => Navigator.pushReplacement<void, void>(
-                              context,
+                              contexto,
                               MaterialPageRoute(
-                                builder: (_) => GameScreen(
-                                  countries: widget.countries,
-                                  continent: widget.continent,
-                                  mode: _mode,
-                                  seconds: widget.seconds,
+                                builder: (_) => TelaJogo(
+                                  paises: widget.paises,
+                                  continente: widget.continente,
+                                  modo: _modo,
+                                  segundos: widget.segundos,
                                 ),
                               ),
                             ),
@@ -169,33 +163,33 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
     );
   }
 
-  Widget _modeCard(QuizMode mode) {
-    final selected = _mode == mode;
-    final color = mode == QuizMode.flagToCountry
+  Widget _cartaoModo(ModoPergunta modo) {
+    final selecionado = _modo == modo;
+    final cor = modo == ModoPergunta.bandeiraParaPais
         ? const Color(0xff22cddd)
         : const Color(0xffff5188);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Semantics(
-        selected: selected,
+        selected: selecionado,
         child: Material(
-          color: selected ? color : const Color(0xff4d38a6),
+          color: selecionado ? cor : const Color(0xff4d38a6),
           borderRadius: BorderRadius.circular(28),
           child: InkWell(
-            onTap: () => setState(() => _mode = mode),
+            onTap: () => setState(() => _modo = modo),
             borderRadius: BorderRadius.circular(28),
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: color, width: 2),
+                border: Border.all(color: cor, width: 2),
               ),
               child: Row(
                 children: [
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Icon(
-                      mode == QuizMode.flagToCountry
+                      modo == ModoPergunta.bandeiraParaPais
                           ? Icons.flag_outlined
                           : Icons.image_outlined,
                       color: const Color(0xff2c2068),
@@ -207,9 +201,9 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          mode.label,
+                          modo.rotulo,
                           style: TextStyle(
-                            color: selected
+                            color: selecionado
                                 ? const Color(0xff2c2068)
                                 : Colors.white,
                             fontSize: 21,
@@ -218,9 +212,9 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          mode.description,
+                          modo.descricao,
                           style: TextStyle(
-                            color: selected
+                            color: selecionado
                                 ? const Color(0xff2c2068)
                                 : const Color(0xffd4caee),
                           ),
@@ -230,10 +224,10 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                   ),
                   const SizedBox(width: 8),
                   Icon(
-                    selected
+                    selecionado
                         ? Icons.check_circle
                         : Icons.radio_button_unchecked,
-                    color: selected ? const Color(0xff2c2068) : Colors.white,
+                    color: selecionado ? const Color(0xff2c2068) : Colors.white,
                   ),
                 ],
               ),

@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
-class MenuAction extends StatelessWidget {
-  const MenuAction({
+class AcaoMenu extends StatelessWidget {
+  const AcaoMenu({
     super.key,
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.shadowColor,
-    required this.onPressed,
+    required this.rotulo,
+    required this.icone,
+    required this.cor,
+    required this.corSombra,
+    required this.aoPressionar,
   });
 
-  final String label;
-  final IconData icon;
-  final Color color;
-  final Color shadowColor;
-  final VoidCallback onPressed;
+  final String rotulo;
+  final IconData icone;
+  final Color cor;
+  final Color corSombra;
+  final VoidCallback aoPressionar;
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext contexto) => Padding(
     padding: const EdgeInsets.only(bottom: 8),
     child: DecoratedBox(
       decoration: BoxDecoration(
-        color: shadowColor,
+        color: corSombra,
         borderRadius: BorderRadius.circular(36),
-        boxShadow: [BoxShadow(color: shadowColor, offset: const Offset(0, 7))],
+        boxShadow: [BoxShadow(color: corSombra, offset: const Offset(0, 7))],
       ),
       child: FilledButton(
-        onPressed: onPressed,
+        onPressed: aoPressionar,
         style: FilledButton.styleFrom(
-          backgroundColor: color,
+          backgroundColor: cor,
           foregroundColor: const Color(0xff2c2068),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           shape: RoundedRectangleBorder(
@@ -40,12 +40,12 @@ class MenuAction extends StatelessWidget {
             CircleAvatar(
               radius: 24,
               backgroundColor: Colors.white,
-              child: Icon(icon, color: const Color(0xff2c2068), size: 28),
+              child: Icon(icone, color: const Color(0xff2c2068), size: 28),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: Text(
-                label,
+                rotulo,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
