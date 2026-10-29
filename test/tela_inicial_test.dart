@@ -29,9 +29,15 @@ void main() {
   testWidgets(
     'Menu lateral oferece ranking e gerenciamento sem alterar o tempo',
     (testador) async {
+      testador.view.physicalSize = const Size(320, 480);
+      testador.view.devicePixelRatio = 1;
+      addTearDown(testador.view.resetPhysicalSize);
+      addTearDown(testador.view.resetDevicePixelRatio);
       await carregarMenu(testador);
+      final posicaoMenu = testador.getTopLeft(find.byTooltip('Abrir menu'));
       await tocarTexto(testador, '3 min');
-      await testador.ensureVisible(find.byTooltip('Abrir menu'));
+      expect(find.byTooltip('Abrir menu').hitTestable(), findsOneWidget);
+      expect(testador.getTopLeft(find.byTooltip('Abrir menu')), posicaoMenu);
       await testador.tap(find.byTooltip('Abrir menu'));
       await testador.pumpAndSettle();
       expect(find.byType(Drawer), findsOneWidget);

@@ -98,26 +98,6 @@ class _EstadoTelaInicial extends State<TelaInicial> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Builder(
-                  builder: (contextoMenu) => IconButton(
-                    tooltip: 'Abrir menu',
-                    onPressed: () => Scaffold.of(contextoMenu).openDrawer(),
-                    icon: const Icon(Icons.menu, color: Colors.white),
-                  ),
-                ),
-                const Spacer(),
-                const Text(
-                  'PT-BR',
-                  style: TextStyle(
-                    color: Color(0xffd4caee),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
             const Center(child: GloboMenu()),
             const SizedBox(height: 16),
             const Center(
@@ -312,7 +292,40 @@ class _EstadoTelaInicial extends State<TelaInicial> {
                 child: Center(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 520),
-                    child: conteudoTela,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                          child: Row(
+                            children: [
+                              Builder(
+                                builder: (contextoMenu) => Tooltip(
+                                  message: 'Abrir menu',
+                                  child: TextButton.icon(
+                                    onPressed: () =>
+                                        Scaffold.of(contextoMenu).openDrawer(),
+                                    icon: const Icon(Icons.menu),
+                                    label: const Text('Menu'),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              const Text(
+                                'PT-BR',
+                                style: TextStyle(
+                                  color: Color(0xffd4caee),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(child: conteudoTela),
+                      ],
+                    ),
                   ),
                 ),
               ),
