@@ -134,6 +134,9 @@ class _EstadoTelaJogo extends State<TelaJogo> with WidgetsBindingObserver {
       MaterialPageRoute(
         builder: (_) => TelaResultado(
           resultado: resultado,
+          modoJogo: widget.modo,
+          continente: widget.continente,
+          duracaoPartida: widget.segundos,
           construirNovaPartida: (_) => novaPartida,
         ),
       ),

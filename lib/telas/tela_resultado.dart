@@ -2,16 +2,96 @@ import 'package:flutter/material.dart';
 
 import '../componentes/tema_jogo.dart';
 import '../modelos/resultado_partida.dart';
+import '../modelos/registro_pontuacao.dart';
+import '../modelos/modo_pergunta.dart';
+import '../modelos/pais.dart';
+import '../servicos/armazenamento_ranking.dart';
 
-class TelaResultado extends StatelessWidget {
+class TelaResultado extends StatefulWidget {
   const TelaResultado({
     super.key,
     required this.resultado,
     this.construirNovaPartida,
+    this.modoJogo = ModoPergunta.bandeiraParaPais,
+    this.continente,
+    this.duracaoPartida = 60,
+    this.idPartida,
+    this.dataPartida,
+    this.armazenamento,
   });
 
   final ResultadoPartida resultado;
   final WidgetBuilder? construirNovaPartida;
+  final ModoPergunta modoJogo;
+  final Continente? continente;
+  final int duracaoPartida;
+  final String? idPartida;
+  final DateTime? dataPartida;
+  final ArmazenamentoRanking? armazenamento;
+
+  @override
+  State<TelaResultado> createState() => _EstadoTelaResultado();
+}
+
+class _EstadoTelaResultado extends State<TelaResultado> {
+  late final String _idPartida;
+  late final DateTime _dataPartida;
+  late final ArmazenamentoRanking _armazenamento;
+  bool _salvando = false;
+  bool _salvo = false;
+  ResultadoPartida get resultado => widget.resultado;
+  WidgetBuilder? get construirNovaPartida => widget.construirNovaPartida;
+
+  @override
+  void initState() {
+    super.initState();
+    _idPartida = widget.idPartida ?? RegistroPontuacao.gerarId();
+    _dataPartida = widget.dataPartida ?? DateTime.now();
+    _armazenamento = widget.armazenamento ?? ArmazenamentoRanking();
+  }
+
+  Future<void> _salvarRanking() async {
+    if (_salvando || _salvo) return;
+    setState(() => _salvando = true);
+    final nome = await showDialog<String>(
+      context: context,
+      builder: (_) => Theme(data: temaJogo, child: const _DialogoNomeJogador()),
+    );
+    if (!mounted) return;
+    if (nome == null) {
+      setState(() => _salvando = false);
+      return;
+    }
+    try {
+      final registro = RegistroPontuacao(
+        id: _idPartida,
+        nomeJogador: nome,
+        pontuacao: resultado.acertos,
+        totalPerguntas: resultado.respondidas,
+        modoJogo: widget.modoJogo,
+        continente: widget.continente,
+        duracaoPartida: widget.duracaoPartida,
+        dataPartida: _dataPartida,
+      );
+      await _armazenamento.salvarPontuacao(registro);
+      if (!mounted) return;
+      setState(() {
+        _salvo = true;
+        _salvando = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pontuação salva no ranking!')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _salvando = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível salvar. Tente novamente.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext contexto) {
@@ -210,6 +290,38 @@ class TelaResultado extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(height: 24),
+                    FilledButton.icon(
+                      onPressed: _salvando || _salvo ? null : _salvarRanking,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xff22cddd),
+                        foregroundColor: const Color(0xff2c2068),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 18,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(36),
+                        ),
+                      ),
+                      icon: Icon(
+                        _salvo
+                            ? Icons.check_circle
+                            : Icons.emoji_events_outlined,
+                      ),
+                      label: Text(
+                        _salvo
+                            ? 'Pontuação salva'
+                            : _salvando
+                            ? 'Salvando…'
+                            : 'Salvar no ranking',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     if (construirNovaPartida != null) ...[
                       _botaoResultado(
                         'Jogar de novo',
@@ -318,5 +430,59 @@ class _EstatisticaResultado extends StatelessWidget {
         ],
       ),
     ),
+  );
+}
+
+class _DialogoNomeJogador extends StatefulWidget {
+  const _DialogoNomeJogador();
+
+  @override
+  State<_DialogoNomeJogador> createState() => _EstadoDialogoNomeJogador();
+}
+
+class _EstadoDialogoNomeJogador extends State<_DialogoNomeJogador> {
+  final _nome = TextEditingController();
+  final _formulario = GlobalKey<FormState>();
+
+  void _confirmar() {
+    if (_formulario.currentState!.validate()) {
+      Navigator.pop(context, _nome.text.trim());
+    }
+  }
+
+  @override
+  void dispose() {
+    _nome.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext contexto) => AlertDialog(
+    title: const Text('Salvar no ranking'),
+    scrollable: true,
+    content: Form(
+      key: _formulario,
+      child: TextFormField(
+        controller: _nome,
+        autofocus: true,
+        maxLength: 20,
+        textCapitalization: TextCapitalization.words,
+        decoration: const InputDecoration(labelText: 'Nome do jogador'),
+        onFieldSubmitted: (_) => _confirmar(),
+        validator: (valor) {
+          final nome = valor?.trim() ?? '';
+          if (nome.isEmpty) return 'Informe seu nome.';
+          if (nome.runes.length > 20) return 'Use no máximo 20 caracteres.';
+          return null;
+        },
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(contexto),
+        child: const Text('Cancelar'),
+      ),
+      FilledButton(onPressed: _confirmar, child: const Text('Salvar')),
+    ],
   );
 }

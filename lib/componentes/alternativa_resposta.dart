@@ -31,23 +31,27 @@ class AlternativaResposta extends StatelessWidget {
     Color cor = Colors.white;
     Color corSombra = const Color(0xff6e649c);
     if (estaCorreta) {
+      //cor do botão da alternaticva correta selecionada
       cor = const Color(0xff31d780);
       corSombra = const Color(0xff1b9255);
     } else if (estaErrada) {
+      //cor do botão da alternativa errada selecionada
       cor = const Color(0xffff5188);
       corSombra = const Color(0xffb82d66);
     } else if (aoPressionar == null) {
       cor = const Color(0xffaaa4c5);
     }
     final situacao = estaCorreta
-        ? 'Resposta correta'
-        : 'Sua resposta: incorreta';
+        ? 'Resposta correta' //mensagem exibida ao acertar a questão
+        : 'Sua resposta: incorreta'; //mensagem exibida ao errar a questão
     final indicador = CircleAvatar(
       radius: 18,
       backgroundColor: Colors.white,
       child: Icon(
         estaCorreta ? Icons.check : Icons.close,
-        color: estaCorreta ? const Color(0xff178d52) : const Color(0xffcf234d),
+        color: estaCorreta
+            ? const Color(0xff178d52)
+            : const Color(0xffcf234d), //icone muda de cor ao ser precionado
       ),
     );
     final imagem = ImagemBandeira(

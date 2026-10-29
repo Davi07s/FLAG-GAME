@@ -49,6 +49,7 @@ app.*.map.json
 
 # Configurações locais e credenciais
 .codex/
+AGENTS.md
 .env
 .env.*
 !.env.example

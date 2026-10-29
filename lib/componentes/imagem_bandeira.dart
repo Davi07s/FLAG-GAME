@@ -14,13 +14,17 @@ class ImagemBandeira extends StatelessWidget {
   // Os originais usam markers, não suportados pelo renderizador SVG.
   static String caminhoRenderizacao(String arquivo) {
     if (arquivo == 'assets/flags/us.svg' || arquivo == 'assets/flags/um.svg') {
-      return arquivo.replaceFirst('assets/flags/', 'assets/flags/compatible/');
+      return arquivo.replaceFirst(
+        'assets/flags/',
+        'assets/flags/compatible/',
+      ); //redirecionar para o diretório correto caso não esteja
     }
     return arquivo;
   }
 
   @override
   Widget build(BuildContext contexto) => AspectRatio(
+    //tratra da renderização da bandeira na tela de jogo
     aspectRatio: 4 / 3,
     child: SvgPicture.asset(
       caminhoRenderizacao(arquivo),

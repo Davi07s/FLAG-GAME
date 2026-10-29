@@ -8,7 +8,7 @@ Future<void> carregarMenu(WidgetTester testador) async {
     for (var tentativa = 0; tentativa < 100; tentativa++) {
       await Future<void>.delayed(const Duration(milliseconds: 20));
       await testador.pump();
-      if (find.text('195 países carregados').evaluate().isNotEmpty) break;
+      if (find.text('195 bandeiras').evaluate().isNotEmpty) break;
     }
   });
   await testador.pumpAndSettle();
@@ -26,6 +26,23 @@ Future<void> tocarTexto(WidgetTester testador, String texto) async {
 }
 
 void main() {
+  testWidgets(
+    'Menu lateral oferece ranking e gerenciamento sem alterar o tempo',
+    (testador) async {
+      await carregarMenu(testador);
+      await tocarTexto(testador, '3 min');
+      await testador.ensureVisible(find.byTooltip('Abrir menu'));
+      await testador.tap(find.byTooltip('Abrir menu'));
+      await testador.pumpAndSettle();
+      expect(find.byType(Drawer), findsOneWidget);
+      expect(find.text('Ranking'), findsOneWidget);
+      expect(find.text('Gerenciar ranking'), findsOneWidget);
+      expect(find.text('Configurações'), findsNothing);
+      Navigator.pop(testador.element(find.byType(Drawer)));
+      await testador.pumpAndSettle();
+      expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+    },
+  );
   testWidgets(
     'Cada cartão abre a preparação com seu continente e tempo escolhido',
     (testador) async {
@@ -147,7 +164,7 @@ void main() {
   ) async {
     await carregarMenu(testador);
     expect(find.text('FLAG'), findsOneWidget);
-    expect(find.text('195 países carregados'), findsOneWidget);
+    expect(find.text('195 bandeiras'), findsOneWidget);
     await tocarTexto(testador, 'Jogar por Continente');
     for (final rotulo in ['África', 'América', 'Ásia', 'Europa', 'Oceania']) {
       await testador.scrollUntilVisible(find.text(rotulo), 100);

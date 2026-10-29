@@ -7,6 +7,7 @@ import '../dados/repositorio_paises.dart';
 import '../modelos/pais.dart';
 import 'tela_continentes.dart';
 import 'tela_preparacao.dart';
+import 'tela_ranking.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -19,6 +20,15 @@ class _EstadoTelaInicial extends State<TelaInicial> {
   List<Pais>? _paises;
   String? _erro;
   int _segundos = 60;
+
+  void _abrirRanking(bool gerenciar) {
+    Navigator.pop(context);
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (_) => TelaRanking(gerenciar: gerenciar)),
+    );
+  }
+
   Future<void> _escolherContinente() async {
     final continente = await Navigator.push<Continente>(
       context,
@@ -88,15 +98,24 @@ class _EstadoTelaInicial extends State<TelaInicial> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'PT-BR',
-                style: TextStyle(
-                  color: Color(0xffd4caee),
-                  fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Builder(
+                  builder: (contextoMenu) => IconButton(
+                    tooltip: 'Abrir menu',
+                    onPressed: () => Scaffold.of(contextoMenu).openDrawer(),
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                const Text(
+                  'PT-BR',
+                  style: TextStyle(
+                    color: Color(0xffd4caee),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             const Center(child: GloboMenu()),
@@ -205,7 +224,7 @@ class _EstadoTelaInicial extends State<TelaInicial> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${_paises!.length} países carregados',
+              '${_paises!.length} bandeiras',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -216,6 +235,46 @@ class _EstadoTelaInicial extends State<TelaInicial> {
     return Theme(
       data: temaJogo,
       child: Scaffold(
+        drawer: Drawer(
+          backgroundColor: const Color(0xff2c2068),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.horizontal(right: Radius.circular(28)),
+          ),
+          child: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'Flag Game',
+                    style: TextStyle(
+                      color: Color(0xffffcf38),
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.emoji_events,
+                    color: Color(0xffffcf38),
+                  ),
+                  title: const Text('Ranking'),
+                  onTap: () => _abrirRanking(false),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.manage_history,
+                    color: Color(0xff22cddd),
+                  ),
+                  title: const Text('Gerenciar ranking'),
+                  onTap: () => _abrirRanking(true),
+                ),
+              ],
+            ),
+          ),
+        ),
         body: Stack(
           fit: StackFit.expand,
           children: [

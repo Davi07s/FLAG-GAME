@@ -9,6 +9,7 @@ class AplicativoBandeiras extends StatelessWidget {
 
   @override
   Widget build(BuildContext contexto) => MaterialApp(
+    debugShowCheckedModeBanner: false, //remove faixa de debug
     title: 'Flag Game',
     theme: ThemeData(
       useMaterial3: true,
