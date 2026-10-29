@@ -43,6 +43,32 @@ void main() {
 
   for (final mode in QuizMode.values) {
     testWidgets(
+      '${mode.label}: fonte ampliada, alternativas e indicadores de resposta',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 480);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await open(tester, mode);
+        final option = find.byType(AnswerOption).last;
+        await tester.ensureVisible(option);
+        await tester.tap(option);
+        await tester.pump();
+        final options = tester.widgetList<AnswerOption>(
+          find.byType(AnswerOption),
+        );
+        expect(options.where((o) => o.isCorrect), hasLength(1));
+        expect(options.every((o) => o.onPressed == null), isTrue);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+        await tester.pump(const Duration(seconds: 2));
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
       '${mode.label}: resposta, bloqueio de toque e avanço automático',
       (tester) async {
         await open(tester, mode);
@@ -91,6 +117,38 @@ void main() {
     );
   }
 
+  testWidgets(
+    'Barra e relógio acompanham o tempo total sem reiniciar na resposta',
+    (tester) async {
+      await open(tester, QuizMode.countryToFlag);
+      expect(find.text('0:30'), findsOneWidget);
+      expect(
+        tester
+            .widget<LinearProgressIndicator>(
+              find.byType(LinearProgressIndicator),
+            )
+            .value,
+        1,
+      );
+      await tester.pump(const Duration(seconds: 5));
+      expect(find.text('0:25'), findsOneWidget);
+      expect(
+        tester
+            .widget<LinearProgressIndicator>(
+              find.byType(LinearProgressIndicator),
+            )
+            .value,
+        closeTo(25 / 30, .001),
+      );
+      final option = find.byType(AnswerOption).first;
+      await tester.ensureVisible(option);
+      await tester.tap(option);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('0:24'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
   testWidgets('Erro não soma ponto e informa a resposta correta', (
     tester,
   ) async {
@@ -120,7 +178,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
       expect(find.text('Tempo esgotado!'), findsOneWidget);
-      expect(find.text('Respostas: 1'), findsOneWidget);
+      expect(find.bySemanticsLabel('Respostas: 1'), findsOneWidget);
       await tester.pump(const Duration(seconds: 3));
       expect(find.byType(AnswerOption), findsNothing);
       expect(find.text('Tempo esgotado!'), findsOneWidget);
@@ -138,7 +196,7 @@ void main() {
     callback();
     await tester.pumpAndSettle();
     expect(find.text('Resultado'), findsOneWidget);
-    expect(find.text('Respostas: 0'), findsOneWidget);
+    expect(find.bySemanticsLabel('Respostas: 0'), findsOneWidget);
     expect(find.text('Pontos: 0'), findsOneWidget);
     expect(find.text('Percentual de acertos: 0,0%'), findsOneWidget);
   });
@@ -177,5 +235,32 @@ void main() {
       findsOneWidget,
     );
     expect(find.byType(AnswerOption), findsNothing);
+  });
+
+  testWidgets('Jogar de novo preserva configuração e começa outra sessão', (
+    tester,
+  ) async {
+    await open(tester, QuizMode.countryToFlag, seconds: 2);
+    final option = find.byType(AnswerOption).first;
+    await tester.ensureVisible(option);
+    await tester.tap(option);
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Respostas: 1'), findsOneWidget);
+    final replay = find.text('Jogar de novo');
+    await tester.ensureVisible(replay);
+    await tester.tap(replay);
+    await tester.pumpAndSettle();
+    final game = tester.widget<GameScreen>(find.byType(GameScreen));
+    expect(game.mode, QuizMode.countryToFlag);
+    expect(game.continent, Continent.america);
+    expect(game.seconds, 2);
+    expect(game.countries, hasLength(countries.length));
+    expect(find.text('Pontos: 0'), findsOneWidget);
+    expect(find.text('Resultado'), findsNothing);
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Respostas: 0'), findsOneWidget);
+    expect(find.text('Percentual de acertos: 0,0%'), findsOneWidget);
   });
 }

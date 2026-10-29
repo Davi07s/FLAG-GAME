@@ -15,13 +15,103 @@ Future<void> loadMenu(WidgetTester tester) async {
 }
 
 Future<void> tapText(WidgetTester tester, String text) async {
+  if (['África', 'América', 'Ásia', 'Europa', 'Oceania'].contains(text) &&
+      find.text(text).evaluate().isEmpty) {
+    await tapText(tester, 'Jogar por Continente');
+  }
   final finder = find.text(text);
-  await tester.scrollUntilVisible(finder, 150);
+  await tester.ensureVisible(finder);
   await tester.tap(finder);
   await tester.pumpAndSettle();
 }
 
 void main() {
+  testWidgets(
+    'Cada cartão abre a preparação com seu continente e tempo escolhido',
+    (tester) async {
+      await loadMenu(tester);
+      await tapText(tester, '3 min');
+      for (final entry in {
+        'África': 54,
+        'América': 35,
+        'Ásia': 48,
+        'Europa': 44,
+        'Oceania': 14,
+      }.entries) {
+        await tapText(tester, 'Jogar por Continente');
+        expect(find.text('Escolha o continente'), findsOneWidget);
+        await tapText(tester, entry.key);
+        expect(find.text('${entry.value} países disponíveis'), findsOneWidget);
+        expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+        expect(find.text(entry.key), findsOneWidget);
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+        expect(find.text('FLAG'), findsOneWidget);
+      }
+    },
+  );
+
+  testWidgets('Voltar da seleção preserva menu e tempo sem iniciar partida', (
+    tester,
+  ) async {
+    await loadMenu(tester);
+    await tapText(tester, '30s');
+    await tapText(tester, 'Jogar por Continente');
+    await tester.tap(find.byTooltip('Voltar ao menu'));
+    await tester.pumpAndSettle();
+    expect(find.text('FLAG'), findsOneWidget);
+    expect(find.text('Tempo total: 30 segundos'), findsOneWidget);
+    expect(find.text('Preparar partida'), findsNothing);
+  });
+
+  testWidgets('Cartões permitem seleção em tela pequena e fonte ampliada', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 480);
+    tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await loadMenu(tester);
+    await tapText(tester, 'Jogar por Continente');
+    for (final label in ['África', 'América', 'Ásia', 'Europa', 'Oceania']) {
+      await tester.ensureVisible(find.text(label));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    }
+    await tapText(tester, 'Oceania');
+    expect(find.text('14 países disponíveis'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'Menu seleciona os quatro tempos sem overflow com fonte ampliada',
+    (tester) async {
+      tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      tester.view.physicalSize = const Size(320, 480);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await loadMenu(tester);
+      for (final entry in {
+        '30s': 30,
+        '60s': 60,
+        '3 min': 180,
+        '5 min': 300,
+      }.entries) {
+        await tapText(tester, entry.key);
+        expect(
+          find.text('Tempo total: ${entry.value} segundos'),
+          findsOneWidget,
+        );
+      }
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets('Menu inicia partida e volta ao menu ao terminar o tempo', (
     tester,
   ) async {
@@ -34,17 +124,18 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Tempo esgotado!'), findsOneWidget);
     await tapText(tester, 'Voltar ao menu');
-    expect(find.text('Flag Game'), findsOneWidget);
+    expect(find.text('FLAG'), findsOneWidget);
     expect(find.text('Preparar partida'), findsNothing);
     expect(find.text('Tempo total: 60 segundos'), findsOneWidget);
     await tapText(tester, 'Jogo aleatório');
     await tapText(tester, 'Iniciar partida');
     expect(find.text('Pontos: 0'), findsOneWidget);
     expect(find.text('Resultado'), findsNothing);
-    await tester.pageBack();
+    await tester.ensureVisible(find.byTooltip('Sair da partida'));
+    await tester.tap(find.byTooltip('Sair da partida'));
     await tester.pumpAndSettle();
     await tester.pump(const Duration(seconds: 61));
-    expect(find.text('Flag Game'), findsOneWidget);
+    expect(find.text('FLAG'), findsOneWidget);
     expect(find.text('Resultado'), findsNothing);
   });
 
@@ -52,55 +143,49 @@ void main() {
     tester,
   ) async {
     await loadMenu(tester);
-    expect(find.text('Flag Game'), findsOneWidget);
+    expect(find.text('FLAG'), findsOneWidget);
     expect(find.text('195 países carregados'), findsOneWidget);
+    await tapText(tester, 'Jogar por Continente');
     for (final label in ['África', 'América', 'Ásia', 'Europa', 'Oceania']) {
       await tester.scrollUntilVisible(find.text(label), 100);
       expect(find.text(label), findsOneWidget);
     }
   });
 
-  testWidgets('Salva tempo, prepara continente e seleciona ambos os modos', (
+  testWidgets(
+    'Escolhe tempo no menu, prepara continente e seleciona ambos os modos',
+    (tester) async {
+      await loadMenu(tester);
+      await tapText(tester, '3 min');
+      expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+      await tapText(tester, 'África');
+      expect(find.text('54 países disponíveis'), findsOneWidget);
+      expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+      expect(find.text('Modo selecionado: Bandeira → país'), findsOneWidget);
+      await tapText(tester, 'País → bandeira');
+      expect(find.text('Modo selecionado: País → bandeira'), findsOneWidget);
+      await tapText(tester, 'Bandeira → país');
+      expect(find.text('Modo selecionado: Bandeira → país'), findsOneWidget);
+      final start = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Iniciar partida'),
+      );
+      expect(start.onPressed, isNotNull);
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Tempo escolhido no menu é aplicado ao jogo aleatório', (
     tester,
   ) async {
     await loadMenu(tester);
-    await tapText(tester, 'Configuração de tempo');
-    for (final seconds in [30, 60, 180, 300]) {
-      expect(find.text('$seconds segundos'), findsOneWidget);
-    }
-    await tapText(tester, '180 segundos');
-    await tapText(tester, 'Salvar tempo');
-    expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
-    await tapText(tester, 'África');
-    expect(find.text('54 países disponíveis'), findsOneWidget);
-    expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
-    expect(find.text('Modo selecionado: Bandeira → país'), findsOneWidget);
-    await tapText(tester, 'País → bandeira');
-    expect(find.text('Modo selecionado: País → bandeira'), findsOneWidget);
-    await tapText(tester, 'Bandeira → país');
-    expect(find.text('Modo selecionado: Bandeira → país'), findsOneWidget);
-    final start = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Iniciar partida'),
-    );
-    expect(start.onPressed, isNotNull);
-    await tester.pageBack();
-    await tester.pumpAndSettle();
-    expect(find.text('Tempo total: 180 segundos'), findsOneWidget);
+    await tapText(tester, '5 min');
+    expect(find.text('Tempo total: 300 segundos'), findsOneWidget);
+    await tapText(tester, 'Jogo aleatório');
+    expect(find.text('195 países disponíveis'), findsOneWidget);
+    expect(find.text('Tempo total: 300 segundos'), findsOneWidget);
   });
-
-  testWidgets(
-    'Voltar sem salvar preserva tempo e aleatório inclui todo catálogo',
-    (tester) async {
-      await loadMenu(tester);
-      await tapText(tester, 'Configuração de tempo');
-      await tapText(tester, '300 segundos');
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      expect(find.text('Tempo total: 60 segundos'), findsOneWidget);
-      await tapText(tester, 'Jogo aleatório');
-      expect(find.text('195 países disponíveis'), findsOneWidget);
-    },
-  );
 
   testWidgets('Menu e preparação permitem rolagem em tela pequena', (
     tester,

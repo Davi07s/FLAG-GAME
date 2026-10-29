@@ -1,16 +1,16 @@
-﻿# Flag Game
+# Flag Game
 
 Projeto acadêmico de Programação para Dispositivos Móveis, em Flutter/Dart, com interface em português brasileiro e Material 3.
 
 ## Estado atual — etapa 5
 
-Modelo de país, catálogo JSON local com 195 países (54 da África, 35 da América, 48 da Ásia, 44 da Europa e 14 da Oceania), validação de campos e arquivos, menu com carregamento e tratamento de erro. O menu permite escolher um continente ou jogo aleatório e abrir a configuração de tempo. A preparação permite selecionar os dois formatos e iniciar a partida. As bandeiras SVG locais são exibidas com flutter_svg, sem chamadas de rede.
+Modelo de país, catálogo JSON local com 195 países (54 da África, 35 da América, 48 da Ásia, 44 da Europa e 14 da Oceania), validação de campos e arquivos, menu com carregamento e tratamento de erro. O menu permite escolher um continente ou jogo aleatório e definir o tempo diretamente na tela inicial. A preparação permite selecionar os dois formatos e iniciar a partida. As bandeiras SVG locais são exibidas com flutter_svg, sem chamadas de rede.
 
 O quiz é jogável nos dois modos, com tempo total, pontuação, indicação de acerto/erro por 800 ms e avanço automático. Ao terminar o tempo, abre a tela de resultados com respostas, acertos, pontos, percentual e botão de voltar ao menu. Conjuntos com menos de quatro países exibem aviso e não permitem iniciar.
 
 As regras estão conectadas à partida: geração de perguntas, quatro alternativas distintas, filtragem por continente, ciclos sem repetição, bloqueio de respostas duplicadas e pontuação. O resultado usa o cálculo do modelo, com percentual zero quando não há respostas.
 
-O tempo padrão é 60 segundos. As opções são 30, 60, 180 e 300 segundos, referentes à partida inteira. Salvar retorna a escolha ao menu; voltar sem salvar descarta a alteração. A preferência permanece somente em memória durante a sessão. Cada preparação começa no modo Bandeira → país.
+O tempo padrão é 60 segundos. As opções são 30, 60, 180 e 300 segundos, referentes à partida inteira. A escolha nas cápsulas do menu é aplicada imediatamente, sem abrir outra tela ou confirmar. A preferência permanece somente em memória durante a sessão. Cada preparação começa no modo Bandeira → país.
 
 ## Plano de desenvolvimento
 
@@ -34,7 +34,7 @@ Flutter, Dart, Material 3 e flutter_svg para renderizar os SVGs locais. Nenhum s
 - lib/models/game_result.dart: respostas, acertos, pontos e percentual.
 - lib/services/quiz_session.dart: sorteio, controle de respostas e pontuação da sessão.
 - lib/screens/home_screen.dart: menu e duração escolhida na sessão.
-- lib/screens/settings_screen.dart: escolha e confirmação do tempo.
+- A seleção de tempo fica em lib/screens/home_screen.dart; não há tela separada.
 - lib/screens/game_setup_screen.dart: seleção de formato e resumo da preparação.
 - lib/screens/game_screen.dart: partida e cronômetro.
 - lib/screens/result_screen.dart: resumo imutável da partida e retorno ao menu.
@@ -44,7 +44,7 @@ Flutter, Dart, Material 3 e flutter_svg para renderizar os SVGs locais. Nenhum s
 - assets/flags/: todos os 271 SVGs extraídos do ZIP, com os nomes originais.
 - test/: testes dos modelos, repositório, regras, menu, partida e resultados.
 
-O estado das telas usa StatefulWidget/setState. Navigator.push abre as telas com MaterialPageRoute; Navigator.pop retorna o tempo salvo. Os dados são passados pelos construtores. Não há backend nem chamadas de rede para carregar países ou bandeiras.
+O estado das telas usa StatefulWidget/setState. Navigator.push abre as telas com MaterialPageRoute; Navigator.pop retorna o continente escolhido. Os dados são passados pelos construtores. Não há backend nem chamadas de rede para carregar países ou bandeiras.
 
 ## Regras da sessão — etapa 3
 
@@ -73,7 +73,7 @@ As imagens são carregadas apenas com SvgPicture.asset. Os rótulos das bandeira
 
 No encerramento, os timers são cancelados e a sessão produz um GameResult imutável. Navigator.pushReplacement substitui a partida pelo resultado, impedindo retornar a uma partida encerrada. A marcação de encerramento ocorre antes da navegação para impedir abertura duplicada.
 
-ResultScreen é StatelessWidget: recebe o resultado pelo construtor e não altera a pontuação. Exibe respostas, acertos, pontos e percentual arredondado para uma casa decimal, com vírgula. O modelo mantém o valor sem arredondamento. Sem respostas, mostra 0,0% e uma mensagem explicativa. A lista permite rolar em telas pequenas e com fonte ampliada.
+ResultScreen é StatelessWidget: recebe o resultado pelo construtor e não altera a pontuação. Exibe respostas, acertos, erros, pontos e percentual arredondado para uma casa decimal, com vírgula. O modelo mantém o valor sem arredondamento. Sem respostas, mostra 0,0% e uma mensagem explicativa. A lista permite rolar em telas pequenas e com fonte ampliada.
 
 Voltar ao menu remove as rotas intermediárias com Navigator.popUntil. Uma nova partida cria outra QuizSession e começa com zero pontos. Sair durante a partida cancela os timers, sem abrir resultados depois.
 
@@ -90,8 +90,8 @@ flutter run
 
 A tela deve mostrar “195 países carregados” e os botões do menu. Para testar esta etapa:
 
-1. Abra Configuração de tempo, escolha 180 segundos e salve. Confira o tempo no menu.
-2. Abra novamente, selecione 300 segundos e volte sem salvar; o menu deve manter 180 segundos.
+1. Toque em 3 min no menu e confira o resumo de 180 segundos.
+2. Toque em 5 min e confira a mudança imediata para 300 segundos; selecione novamente 3 min para continuar.
 3. Escolha um continente: a preparação deve mostrar a contagem do continente escolhido e o tempo salvo.
 4. Alterne entre Bandeira → país e País → bandeira e inicie. Confira a bandeira com quatro nomes no primeiro modo, ou o nome com quatro bandeiras no segundo.
 5. Responda e tente tocar outra alternativa imediatamente: deve contar apenas uma resposta. Confira o acerto/erro e o avanço automático.
@@ -99,7 +99,7 @@ A tela deve mostrar “195 países carregados” e os botões do menu. Para test
 7. Abra Jogo aleatório: devem aparecer 195 países disponíveis na preparação. Repita nos dois modos.
 8. Confira a rolagem em uma tela pequena. Depois de instalar, abra sem conexão e jogue para conferir os assets locais. Esta conferência manual em dispositivo ainda precisa ser realizada.
 
-Os testes verificam o catálogo empacotado, contagens e correspondências por continente, dados inválidos, códigos duplicados, arquivo ausente, menu, navegação, confirmação/cancelamento do tempo, seleção de modos e tela pequena. Também verificam ciclos de perguntas sem repetição, alternativas únicas, uma correta, filtragem por continente, conjuntos insuficientes, bloqueio de respostas, encerramento, pontuação e percentuais. A partida tem testes para os dois modos com SVGs reais, acerto/erro, avanço, cancelamento de timers ao descartar, tempo esgotado, resposta no último segundo, tela pequena e fluxo do menu até o encerramento. Execute `flutter test test/game_screen_test.dart` para os testes específicos da partida.
+Os testes verificam o catálogo empacotado, contagens e correspondências por continente, dados inválidos, códigos duplicados, arquivo ausente, menu, navegação, seleção direta do tempo no menu, seleção de modos e tela pequena. Também verificam ciclos de perguntas sem repetição, alternativas únicas, uma correta, filtragem por continente, conjuntos insuficientes, bloqueio de respostas, encerramento, pontuação e percentuais. A partida tem testes para os dois modos com SVGs reais, acerto/erro, avanço, cancelamento de timers ao descartar, tempo esgotado, resposta no último segundo, tela pequena e fluxo do menu até o encerramento. Execute `flutter test test/game_screen_test.dart` para os testes específicos da partida.
 
 Os testes de resultado conferem as contagens, percentual com arredondamento, ausência de respostas e tela pequena com fonte ampliada. Execute `flutter test test/result_screen_test.dart`. O fluxo de menu verifica também retorno, início de outra partida e saída sem timers pendentes.
 
@@ -166,3 +166,61 @@ Para validar especificamente o acervo, execute `flutter test test/full_catalog_t
 ### Compatibilidade de SVG
 
 Os originais us.svg e um.svg desenham estrelas com marker-mid, não suportado pelo flutter_svg. Os 271 originais permanecem idênticos ao ZIP. Duas cópias derivadas em assets/flags/compatible/ substituem os marcadores por 50 paths com as mesmas formas e posições. FlagImage seleciona essas cópias somente para renderização; o catálogo mantém os caminhos originais. Não foram baixadas nem inventadas bandeiras. O teste de decodificação usa os mesmos caminhos de exibição do aplicativo.
+
+## Interface visual — menu principal
+
+A primeira tela foi adaptada ao PDF “Flag Game — Modelo de Interface”: fundo roxo-escuro, título amarelo/rosa, globo decorativo feito com widgets, botões arredondados com sombra e seleção rápida de 30s, 60s, 3 min e 5 min. Nenhuma dependência foi adicionada e o AGENTS.md foi preservado.
+
+O tema é local ao menu; as demais telas ainda aguardam suas etapas visuais. Jogar por Continente abre a tela dedicada de seleção. As quatro opções de Tempo de jogo são configuradas diretamente no menu, sem tela ou ícone de ajustes. Ranking e idiomas não foram acrescentados; PT-BR é apenas um rótulo. A tipografia usa a fonte disponível no sistema, com peso forte, aproximando o modelo sem carregar fontes pela rede.
+
+Arquivos: home_screen.dart, widgets/menu_action.dart e widgets/menu_globe.dart. SingleChildScrollView permite rolagem, ConstrainedBox limita a largura em telas grandes e Wrap acomoda os tempos em telas pequenas. StatefulWidget/setState e Navigator continuam controlando estado e navegação.
+
+Para conferir: execute flutter run, altere os quatro tempos no menu, abra a seleção de continentes e inicie partidas nos dois modos. Confira também a rolagem com tela pequena e fonte ampliada. A seleção de continentes também foi implementada na etapa seguinte.
+
+
+## Interface visual — seleção de continentes
+
+ContinentScreen segue a segunda página do PDF: fundo roxo, título amarelo, botão de voltar, cartões arredondados com sombra e ícones em círculos brancos. África é laranja; América, verde; Ásia, rosa; Europa, azul; Oceania, ciano e ocupa a largura inteira no layout de duas colunas.
+
+LayoutBuilder calcula a largura dos cartões, e Wrap organiza duas colunas ou uma coluna quando a tela é estreita ou a fonte está ampliada. SingleChildScrollView permite acessar todos os cartões. A altura dos cartões acompanha o texto, sem grade com altura fixa.
+
+A tela usa StatelessWidget porque apenas devolve uma escolha. Navigator.pop retorna um Continent ao menu, que abre GameSetupScreen com o catálogo local completo e o tempo já selecionado. Voltar sem selecionar mantém o menu e o tempo. O fluxo aleatório continua abrindo a preparação diretamente.
+
+Arquivos: lib/screens/continent_screen.dart, lib/screens/home_screen.dart e test/widget_test.dart. Nenhuma dependência, regra de jogo ou arquivo AGENTS.md foi alterado.
+
+Para testar: escolha 3 min, abra Jogar por Continente e selecione cada cartão. A preparação deve mostrar respectivamente 54, 35, 48, 44 ou 14 países, mantendo 180 segundos. Confira também voltar sem selecionar e a rolagem em tela pequena com fonte ampliada. A tela de perguntas foi adaptada na etapa seguinte.
+
+
+## Interface visual — perguntas
+
+A partida segue a terceira página do PDF: fundo roxo com elementos decorativos, botão de sair, placar amarelo, relógio rosa no formato minutos:segundos e barra verde representando a fração do tempo total restante. O modo e o continente continuam identificados na tela.
+
+Em Bandeira → país, a imagem local aparece em um cartão branco arredondado e as quatro alternativas exibem nomes. Em País → bandeira, o nome aparece no enunciado e as quatro imagens locais ficam em duas colunas, ou em uma coluna para telas estreitas/fontes ampliadas. As alternativas têm altura ajustável e a tela permite rolagem.
+
+Antes de responder, os botões são brancos. Depois, a alternativa correta fica verde com confirmação, a escolhida incorreta fica rosa com ícone de erro e as demais ficam apagadas. A mensagem de acerto/erro continua acessível com Semantics.liveRegion. O indicador do tempo possui descrição para leitores de tela. Os nomes dos países não são revelados nos rótulos acessíveis das imagens antes da resposta.
+
+Arquivos alterados: lib/screens/game_screen.dart, lib/widgets/answer_option.dart e test/game_screen_test.dart. O layout usa Theme local, Container/BoxDecoration, ClipRRect, Wrap/LayoutBuilder e LinearProgressIndicator. Estado, sorteio, pontuação, prazo total, bloqueio de respostas e descarte de timers permanecem com a implementação existente. Não há nova dependência nem alteração no AGENTS.md ou no catálogo.
+
+Para conferir, execute flutter run e inicie partidas nos dois modos. Responda certo e errado, observe as cores/ícones, aguarde o avanço e confira que o relógio não reinicia. Teste também a rolagem com fonte ampliada e o botão de sair. Os testes verificam os dois formatos em tela pequena com fonte ampliada, os estados das alternativas, a barra e o relógio, além dos casos de limite já existentes. A tela de resultados foi adaptada na etapa seguinte.
+
+
+## Interface visual — resultados
+
+ResultScreen segue a quarta página do PDF: fundo roxo, título amarelo, indicador circular verde com percentual central, estrelas decorativas e cartões roxos para respondidas, acertos e erros. A pontuação e a mensagem de tempo esgotado continuam visíveis. O percentual é calculado pelo GameResult, preservando a regra de zero quando não há respostas; a apresentação usa uma casa decimal com vírgula.
+
+CircularProgressIndicator usa accuracy / 100 e uma descrição acessível. Os cartões possuem rótulos Semantics com as contagens, e as estrelas são apenas decoração, sem criar regra de premiação. LayoutBuilder e Wrap passam os cartões para uma coluna quando a largura ou a fonte exigem. SingleChildScrollView permite acessar as ações em telas pequenas.
+
+Jogar de novo inicia uma nova GameScreen com os mesmos países, continente, formato e duração, substituindo o resultado com Navigator.pushReplacement. A nova QuizSession começa com zero pontos e respostas. Voltar ao menu mantém Navigator.popUntil. O resultado recebe um WidgetBuilder opcional para a repetição, sem dependência das regras ou do estado da partida; a partida real sempre fornece esse construtor.
+
+Arquivos alterados: result_screen.dart, game_screen.dart, test/result_screen_test.dart e test/game_screen_test.dart. Nenhuma dependência, catálogo ou AGENTS.md foi alterado.
+
+Para testar: termine uma partida, confira o percentual e as três contagens, use Jogar de novo e confirme a configuração preservada e os pontos zerados. Termine outra partida e volte ao menu. Confira também ausência de respostas, 100% de acertos e rolagem com fonte ampliada. As quatro telas do PDF estão adaptadas; o tempo é escolhido diretamente no menu; a preparação também recebeu o tema visual na correção seguinte.
+
+
+## Interface visual — preparação da partida
+
+A tela intermediária de preparação também utiliza fundo roxo, título amarelo, cartão de resumo e botão verde de iniciar. Os dois formatos são cartões selecionáveis: ciano para Bandeira → país e rosa para País → bandeira. Texto, borda e ícone indicam o modo selecionado, inclusive com Semantics.selected.
+
+GameSetupScreen mantém StatefulWidget/setState, os dados recebidos pelo construtor e a navegação existente. SingleChildScrollView, largura máxima e textos em Expanded permitem rolagem e quebra de linha. O bloqueio para conjuntos com menos de quatro países permanece. Nenhuma dependência, regra, catálogo ou AGENTS.md foi alterado.
+
+Para conferir: abra um continente ou Jogo aleatório, alterne os dois formatos e inicie. O continente, o tempo e a quantidade de países devem permanecer corretos. Confira a tela também em dispositivo pequeno.

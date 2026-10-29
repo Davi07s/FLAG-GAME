@@ -14,6 +14,6 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
     ),
-    home: const HomeScreen(),
+    home: const HomeScreen(), //tela inicial do jogo
   );
 }
